@@ -14,7 +14,7 @@ end
 })
 
 function showCheatUI()
-		local cheatUIFrame = game.player.gui.center.add{type = "frame",name = "cheatUIFrame",caption = gt("cheatUICaption"),direction = "vertical"}
+		local cheatUIFrame = game.player.gui.center.add{type = "frame",name = "cheatUIFrame",caption = gt("cheatUIFrame"),direction = "vertical"}
 		cheatUIFrame.add{type = "flow", name = "cheatUIFlow", direction = "horizontal"}
 		cheatUIFrame.cheatUIFlow.add{type = "button", name = "btn_playercheats", caption = gt("btn_playercheats")}
 		cheatUIFrame.cheatUIFlow.add{type = "button", name = "btn_worldcheats", caption = gt("btn_worldcheats")}
@@ -23,7 +23,6 @@ function showCheatUI()
 end
 
 function showPlayerMenu()
-	print("showPlayerMenu")
 	local PlayerMenu = game.player.gui.center.add{type = "frame", name = "PlayerMenuFrame", caption = gt("PlayerMenuFrame"), direction = "vertical" }
 	PlayerMenu.add{ type = "flow", name = "PlayerMenuFlow1", direction = "horizontal"}
 	
@@ -35,6 +34,7 @@ end
 
 function showPlayerMiningSpeed()
     local actmisp = game.player.force.manualminingspeedmodifier
+	if actmisp < 1 then actmisp = 1 end
 	local miningSpeed = game.player.gui.center.add{type = "frame", name = "miningspeedframe", caption = gt("miningspeedframe").." "..actmisp, direction = "vertical"}
 	miningSpeed.add{type = "flow", name = "miningspeedflow", direction = "horizontal"}
 	local msf = miningSpeed.miningspeedflow
@@ -85,9 +85,10 @@ function showWorldMenu()
 	wcsn.add{type="button", name="btn_worldcheat_speed_10",caption=gt("btn_worldcheat_speed_10")}
 	
 	wcsp.add{type="label", name="lbl_worldcheat_speed_pos",caption=gt("lbl_worldcheat_speed_pos")}
-	for i = 1.5, 10, 0.5 do
+	for i = 1.5, 9.5, 0.5 do
 	    wcsp.add{type="button", name="btn_worldcheat_speed_"..i,caption=gt("btn_worldcheat_speed_"..i)}
     end
+	wcsp.add{type="button", name="btn_worldcheat_speed_100",caption=gt("btn_worldcheat_speed_100")}
 
 	wc.worldcheatsalwaysday.add{type="label", name="lbl_worldcheat_alwaysday",caption=gt("lbl_worldcheat_alwaysday")}
 	wc.worldcheatsalwaysday.add{type="button", name="btn_worldcheat_alwaysdayYes",caption=gt("btn_worldcheat_alwaysdayYes")}
@@ -103,7 +104,7 @@ function showWorldMenu()
 end
 
 function showItemsPage1()
-	local ItemsmenuP1 = game.player.gui.center.add{type="frame",name="itemframeP1",caption=gt("itemframeP1Caption"), direction="vertical"}
+	local ItemsmenuP1 = game.player.gui.center.add{type="frame",name="itemframeP1",caption=gt("itemframeP1"), direction="vertical"}
 	ItemsmenuP1.add{type="flow", name="row0",direction="horizontal"}
 	ItemsmenuP1.add{type="flow", name="row1",direction="horizontal"}
 	ItemsmenuP1.add{type="flow", name="row2",direction="horizontal"}
@@ -234,7 +235,7 @@ game.onevent(
 		elseif event.element.name == "btn_worldcheat_speed_9.5" then 
 			game.speed = 9.5
 			print(gt("gamespeed95"))
-		elseif event.element.name == "btn_worldcheat_speed_10" then 
+		elseif event.element.name == "btn_worldcheat_speed_100" then 
 			game.speed = 10
 			print(gt("gamespeed100"))			
 -- player menu things
@@ -332,7 +333,14 @@ game.onevent(
 			print(gt("miningspeedhundredfold"))
 			closeMiningSpeed()
 			showPlayerMenu()
+		elseif event.element.name == "btn_misp500" then
+			game.player.force.manualminingspeedmodifier=500
+			print(gt("miningspeedfivehundredfold"))
+			closeMiningSpeed()
+			showPlayerMenu()
 -- Item pages
+		elseif event.element.name == "btn_itemp1_close" then
+			closeItemsPage1()
 		elseif event.element.name == "btn_Giveitems" then
 			closeCheatGui()
 			showItemsPage1()
