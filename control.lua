@@ -3,21 +3,37 @@ require "defines"
 items = game.itemprototypes
 
 remote.addinterface("cheater", {
-  show = function()
+  show = function(nickname)
     if #game.players == 1 then
       showCheatUI(1)
       return
     end
     if nickname and type(nickname) == "string" then
-      showCheatUI(game.getplayer(nickname))
+      local index = indexFromNickname(nickname)
+      if not index then
+        printToAll({"nameErrorWithName", nickname})
+        return
+      end
+      showCheatUI(index)
     else
       -- error
-      for _, player in ipairs(game.players) do
-        player.print({"nameError"})
-      end
-    end
+        printToAll({"nameError"})
+    end 
   end
 })
+
+function printToAll(msg)
+  for _, player in ipairs(game.players) do
+    player.print(msg)
+  end
+end
+
+function indexFromNickname(name)
+  for index, player in ipairs(game.players) do
+    if player.name == name then return index end
+  end
+  return nil
+end
 
 function showCheatUI(playerindex)
   if not game.players[playerindex].gui.center.cheatUIFrame then
